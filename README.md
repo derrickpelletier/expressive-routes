@@ -1,4 +1,4 @@
-Transform hierarchically structured routes into express routes.
+A really simple helper to transform hierarchically structured routes into express routes.
 Supports trigger characters to add middleware downstream.
 
 Get it like this: `npm install expressive-routes`
