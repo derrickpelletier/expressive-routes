@@ -36,7 +36,7 @@ module.exports = function (app, routes, triggerMap, verbose) {
 
       // If this value is just another object, recurse.
       if(!Array.isArray(ob[key]) && typeof ob[key] !== 'function') {
-        mapper(ob[key], route + key, triggers.length ? triggers : false);
+        mapper(ob[key], route + key, triggers);
         continue;
       }
 
