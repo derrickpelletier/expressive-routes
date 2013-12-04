@@ -4,7 +4,7 @@ Supports trigger characters to add middleware downstream.
 Get it like this: `npm install expressive-routes`
 
 Use it like this:
-```
+```javascript
 var router = require('expressive-routes'),
     app = express();
 
