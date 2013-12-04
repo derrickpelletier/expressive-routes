@@ -1,0 +1,27 @@
+{
+  "name": "expressive-routes",
+  "version": "0.1.0",
+  "description": "Transform hierarchically structured routes into express routes.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/derrickpelletier/expressive-routes.git"
+  },
+  "homepage": "http://github.com/derrickpelletier/expressive-routes.git",
+  "keywords": [
+    "express",
+    "routes",
+    "routing",
+    "connect"
+  ],
+  "author": {
+    "name": "Derrick Pelletier",
+    "email": "derrick@dpelletier.com",
+    "url": "http://dpelletier.com"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "~1.6.0",
+    "express": "~3.4.0"
+  }
+}
