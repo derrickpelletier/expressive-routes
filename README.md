@@ -1,23 +1,23 @@
-A really simple helper to transform hierarchically structured routes into express routes.
+A really simple helper to transform hierarchically structured route maps into server routes.
 Supports trigger characters to add middleware downstream.
+
+Designed to work with express.js by default, or any route system when using a custom processor (see below).
 
 Get it like this: `npm install expressive-routes`
 
-Use it like this:
+See example.js for full suggested usage.
+
+---
+
+Example of a contrived route map.
+
 ```javascript
-var router = require('expressive-routes'),
-    app = express();
-
-// map of route triggers to appropriate middleware
-var triggerMap = {
-  '!': helper.ensureAuthenticated,
-  '$': helper.ensureAdministrator
-};
-
-// some contrived routes
 var routes = {
   '/': {get: Main.index},
-  '/login': {post: Session.login},
+  '/login': {
+    post: Session.performLogin,
+    get: Session.login
+  },
   '/logout': {get: Session.logout},
   '/$admin': {
     get: Admin.index,
@@ -35,11 +35,31 @@ var routes = {
     post: Account.updateProfile
   }
 };
+```
 
-router(app, routes, triggerMap, true);
+The `$` and `!` in these keys are used to trigger middleware downstream to its children:
+Contrived trigger map:
+
+```javascript
+var triggers = {
+  '!': helper.ensureAuthenticated,
+  '$': helper.ensureAdministrator
+};
+```
+
+With a route map, and an optional trigger map in place, the routing can be processed as follows:
+
+```javascript
+var expressive = require('expressive-routes');
+
+var opts = {
+  triggerMap: triggers,
+  verbose: true
+};
+
+expressive(routes, app, opts);
 
 // OUTPUT:
-
 // get    / (1)
 // post   /login (1)
 // get    /logout (1)
@@ -52,7 +72,24 @@ router(app, routes, triggerMap, true);
 // post ! /account (2)
 ```
 
-With verbose mapping, the above output is printed, with the preceeding triggers depicting which middleware was injected. The trailing number indicating the number of middlewares on the route.
+---
+
+A sample using a custom processor, in case you aren't using express, or just want it to do something fancier.
+```
+var opts = {
+  triggerMap: triggers,
+  processor: function(method, route, endpoints) {
+    console.log("Something fancier", method, route);
+    app[method].apply(app, [route].concat(endpoints));
+  }
+};
+
+expressive(routes, opts);
+```
+
+---
+
+With verbose mapping, the output is printed, with the preceeding triggers depicting which middleware was injected. The trailing number indicating the number of middlewares on the route.
 
 Because the $ was set on the `/admin` route, itself and all children will have the `ensureAdministrator()` middleware. 
 If a trigger is added to the child of a route that also has a trigger, the subsequent trigger will be added to the stack.
@@ -61,5 +98,5 @@ The `/$admin/users/:user_id/destroy` also shows arrays of functions are also sup
 
 ------
 
-+ More tests soon?
++ Real tests soon?
 + Better regex support, perhaps?
