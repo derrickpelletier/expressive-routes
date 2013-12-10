@@ -47,7 +47,7 @@ before(function(done){
     }
   };
 
-  router(app, routes, triggerMap);
+  router(routes, app, {triggerMap: triggerMap});
   done();
 });
 
